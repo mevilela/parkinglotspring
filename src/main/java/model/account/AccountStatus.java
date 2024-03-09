@@ -1,6 +1,6 @@
 package model.account;
 
-enum AccountStatus {
+public enum AccountStatus {
     ACTIVE,
     CLOSED,
     CANCELED,

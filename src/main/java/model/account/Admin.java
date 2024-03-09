@@ -6,9 +6,6 @@ import jakarta.persistence.Id;
 @Entity
 public class Admin extends Account{
 
-    @Id
-    private Integer id;
-
     @Override
     public boolean resetPassword() {
         return false;

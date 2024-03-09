@@ -1,7 +1,6 @@
 package model.account;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -12,8 +11,9 @@ public abstract class Account {
     private String username;
     private String password;
 
+    @Embedded //colocar uma classe a parte para criar caracteristicas em uma entity sem criar uma tabela nova
     private Person person;
-
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     public abstract boolean resetPassword();
@@ -26,6 +26,14 @@ public abstract class Account {
         this.password = password;
         this.person = person;
         this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -56,7 +64,7 @@ public abstract class Account {
         return status;
     }
 
-    public void setStatus(AccountStatus status) {
+    public void setStatus() {
         this.status = status;
     }
 }
