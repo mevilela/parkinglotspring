@@ -1,15 +1,20 @@
 package zely.parkinglotspring.model.account;
 
+import jakarta.persistence.Embedded;
+import zely.parkinglotspring.model.address.Address;
+
 public class Person {
     private String name;
-    private String address;
+
+    @Embedded
+    private Address address;
     private String phone;
     private String email;
 
     public Person() {
     }
 
-    public Person(String name, String address, String phone, String email) {
+    public Person(String name, Address address, String phone, String email) {
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -24,11 +29,11 @@ public class Person {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

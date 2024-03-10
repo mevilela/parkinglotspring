@@ -1,5 +1,9 @@
 package zely.parkinglotspring.controller.account;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zely.parkinglotspring.model.account.*;
 import zely.parkinglotspring.service.account.AccountService;
@@ -22,36 +26,18 @@ public class AccountController {
         return accountService.getAllAccounts();
     }
 
-    @PostMapping("/create")
-    public Account newAccount(@RequestBody Object accountType){
-        return accountService.newAccount(accountType);
-
+    @PostMapping("/")
+    public Account newAccount(@RequestBody Account account) {
+        return accountService.newAccount(account);
     }
 
-//    @PostMapping("/create/admin")
-//    public Account newAdminAccount(@RequestBody Admin admin){
-//
-//        return accountService.newAdminAccount(admin);
-//
-//    }
-//
-//    @PostMapping("/create/agent")
-//    public Account newParkingAgentAccount(@RequestBody ParkingAgent parkingAgent){
-//
-//        return accountService.newParkingAgentAccount(parkingAgent);
-//
-//    }
-//
-//    @PostMapping("/create/customer")
-//    public Account newCustomerAccount(@RequestBody Customer customer){
-//
-//        return accountService.newCustomerAccount(customer);
-//    }
+    @DeleteMapping
+    public ResponseEntity<?> deleteAccount(@PathVariable Integer id){
 
+        accountService.deleteAccountById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
 
-
-
-
+    }
 }
 
 // admin
