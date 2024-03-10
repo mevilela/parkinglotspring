@@ -1,4 +1,4 @@
-package model.account;
+package zely.parkinglotspring.model.account;
 
 public class Person {
     private String name;

@@ -1,9 +1,11 @@
-package model.account;
+package zely.parkinglotspring.model.account;
 
 import jakarta.persistence.*;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "account_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Account {
 
     @Id
@@ -25,6 +27,14 @@ public abstract class Account {
         this.username = username;
         this.password = password;
         this.person = person;
+        this.status = status;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
         this.status = status;
     }
 
@@ -60,11 +70,4 @@ public abstract class Account {
         this.person = person;
     }
 
-    public AccountStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus() {
-        this.status = status;
-    }
 }

@@ -1,9 +1,10 @@
-package model.account;
+package zely.parkinglotspring.model.account;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 @Entity
+@DiscriminatorValue("customer")
 public class Customer extends Account{
 
     @Override
