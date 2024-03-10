@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "account_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Account {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
     private String password;
@@ -18,16 +18,28 @@ public abstract class Account {
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+
     public abstract boolean resetPassword();
 
     public Account() {
     }
 
-    public Account(String username, String password, Person person, AccountStatus status) {
+    public Account(String username, String password, Person person, AccountStatus status, AccountType accountType) {
         this.username = username;
         this.password = password;
         this.person = person;
         this.status = status;
+        this.accountType = accountType;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
     public AccountStatus getStatus() {
@@ -40,10 +52,6 @@ public abstract class Account {
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getUsername() {

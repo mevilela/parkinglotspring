@@ -9,6 +9,8 @@ import zely.parkinglotspring.repository.account.AccountRepository;
 
 import java.util.List;
 
+import static zely.parkinglotspring.model.account.AccountType.*;
+
 @Service
 public class AccountService {
 
@@ -25,20 +27,36 @@ public class AccountService {
 
     }
 
-    public Account newAdminAccount(Admin admin) {
 
-        return accountRepository.save(admin);
+//    public Account newAccount(Object account) {
+//        if (account instanceof Admin) {
+//            Admin admin = (Admin) account;
+//            return accountRepository.save(admin);
+//        } else if (account instanceof ParkingAgent){
+//            ParkingAgent parkingAgent = (ParkingAgent) account;
+//            return accountRepository.save(parkingAgent);
+//        } else if (account instanceof Customer){
+//            Customer customer = (Customer) account;
+//            return accountRepository.save(customer);
+//        } else {
+//            throw new IllegalArgumentException("Invalid class account");
+//        }
+//    }
 
-    }
-
-    public Account newParkingAgentAccount(ParkingAgent parkingAgent) {
-
-        return accountRepository.save(parkingAgent);
-    }
-
-    public Account newCustomerAccount(Customer customer) {
-
-        return accountRepository.save(customer);
+    public Account newAccount(Object accountType) {
+        if (accountType.equals(ADMIN)) {
+            Admin admin = new Admin();
+            return accountRepository.save(admin);
+        } else if (accountType.equals(PARKING_AGENT)){
+            ParkingAgent parkingAgent = new ParkingAgent();
+            return accountRepository.save(parkingAgent);
+        } else if (accountType.equals(CUSTOMER)){
+            Customer customer = new Customer();
+            return accountRepository.save(customer);
+        }
+        else {
+            throw new IllegalArgumentException("Invalid account type");
+        }
     }
 }
 

@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import zely.parkinglotspring.model.account.AccountType;
 import zely.parkinglotspring.model.account.Admin;
 import zely.parkinglotspring.model.account.Person;
 import zely.parkinglotspring.repository.account.AccountRepository;
@@ -29,7 +30,7 @@ public class ParkinglotspringApplication {
 
 
             Admin admin1 = new Admin();
-            admin1.setId(1);
+            admin1.setAccountType(AccountType.ADMIN);
             admin1.setPerson(person1);
             admin1.setPassword("123456");
             admin1.setUsername("maria");

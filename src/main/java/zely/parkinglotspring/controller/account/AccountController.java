@@ -1,10 +1,7 @@
 package zely.parkinglotspring.controller.account;
 
 import org.springframework.web.bind.annotation.*;
-import zely.parkinglotspring.model.account.Account;
-import zely.parkinglotspring.model.account.Admin;
-import zely.parkinglotspring.model.account.Customer;
-import zely.parkinglotspring.model.account.ParkingAgent;
+import zely.parkinglotspring.model.account.*;
 import zely.parkinglotspring.service.account.AccountService;
 
 import java.util.List;
@@ -25,25 +22,31 @@ public class AccountController {
         return accountService.getAllAccounts();
     }
 
-    @PostMapping("/create/admin")
-    public Account newAdminAccount(@RequestBody Admin admin){
-
-        return accountService.newAdminAccount(admin);
-
-    }
-
-    @PostMapping("/create/agent")
-    public Account newParkingAgentAccount(@RequestBody ParkingAgent parkingAgent){
-
-        return accountService.newParkingAgentAccount(parkingAgent);
+    @PostMapping("/create")
+    public Account newAccount(@RequestBody Object accountType){
+        return accountService.newAccount(accountType);
 
     }
 
-    @PostMapping("/create/customer")
-    public Account newCustomerAccount(@RequestBody Customer customer){
-
-        return accountService.newCustomerAccount(customer);
-    }
+//    @PostMapping("/create/admin")
+//    public Account newAdminAccount(@RequestBody Admin admin){
+//
+//        return accountService.newAdminAccount(admin);
+//
+//    }
+//
+//    @PostMapping("/create/agent")
+//    public Account newParkingAgentAccount(@RequestBody ParkingAgent parkingAgent){
+//
+//        return accountService.newParkingAgentAccount(parkingAgent);
+//
+//    }
+//
+//    @PostMapping("/create/customer")
+//    public Account newCustomerAccount(@RequestBody Customer customer){
+//
+//        return accountService.newCustomerAccount(customer);
+//    }
 
 
 
