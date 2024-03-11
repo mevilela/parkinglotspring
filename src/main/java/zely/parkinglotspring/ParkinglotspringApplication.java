@@ -17,6 +17,8 @@ import zely.parkinglotspring.repository.parkinglot.ParkingLotRepository;
 import zely.parkinglotspring.repository.parkingspot.ParkingSpotRepository;
 import zely.parkinglotspring.repository.vehicle.VehicleRepository;
 
+import java.util.List;
+
 import static zely.parkinglotspring.model.account.AccountStatus.*;
 
 @SpringBootApplication
@@ -47,10 +49,22 @@ public class ParkinglotspringApplication {
 
             createParkingSpot(parkingSpotRepository, parkingLot, 3, "compact");
 
-            createVehicle(vehicleRepository, 4, "car", faker);
-            createVehicle(vehicleRepository, 3, "truck", faker);
-            createVehicle(vehicleRepository, 2, "van", faker);
-            createVehicle(vehicleRepository, 2, "moto", faker);
+            String randomLicenseNumber = "###-###";
+            Vehicle vehicle = new Car();
+            vehicle.setLicenseNo(faker.numerify(randomLicenseNumber));
+            vehicle = vehicleRepository.save(vehicle);
+
+            List<ParkingSpot> freeCompactParkingSpots = parkingSpotRepository.getParkingSpotsBySpotType(Compact.class);
+            ParkingSpot freeCompactParkingSpot = freeCompactParkingSpots.get(0);
+            vehicle.setParkingSpot(freeCompactParkingSpot);
+            vehicleRepository.save(vehicle);
+            freeCompactParkingSpot.setFree(false);
+            parkingSpotRepository.save(freeCompactParkingSpot);
+
+//            createVehicle(vehicleRepository, 4, "car", faker);
+//            createVehicle(vehicleRepository, 3, "truck", faker);
+//            createVehicle(vehicleRepository, 2, "van", faker);
+//            createVehicle(vehicleRepository, 2, "moto", faker);
         };
     }
 

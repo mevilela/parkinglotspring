@@ -62,4 +62,12 @@ public abstract class ParkingSpot {
     public void setParkingLot(ParkingLot parkingLot) {
         this.parkingLot = parkingLot;
     }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
 }
