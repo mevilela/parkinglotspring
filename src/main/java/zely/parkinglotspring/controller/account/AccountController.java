@@ -42,11 +42,11 @@ public class AccountController {
 
 // admin
 ////    //add spot
-////    //add agent
+////    //add agent - done
 ////    //add / modify rate
 ////    //add entry / exit panel
 ////    //update account
-//      //view account
+//      //view account - done
 
 // customer
 //    //take ticket

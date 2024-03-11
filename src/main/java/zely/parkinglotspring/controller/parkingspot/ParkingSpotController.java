@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zely.parkinglotspring.model.parkingspot.ParkingSpot;
+import zely.parkinglotspring.model.vehicle.Vehicle;
 import zely.parkinglotspring.service.parkingspot.ParkingSpotService;
 
 import java.util.List;
@@ -25,7 +26,12 @@ public class ParkingSpotController {
        return ResponseEntity.ok(parkingSpotService.getAllParkingSpots());
     }
 
-    @PostMapping("/")
+    @GetMapping("/type")
+    public ResponseEntity<ParkingSpot> getParkingSpotByType(String spotType){
+        return ResponseEntity.ok(parkingSpotService.getParkingSpotByType(spotType));
+    }
+
+    @PostMapping("/") //todo apenas o admin pode fazer essa operação
     public ResponseEntity<?> createNewSpot(@RequestBody ParkingSpot parkingSpot){
 
         ParkingSpot createdSpot = parkingSpotService.createNewParkingSpot(parkingSpot);

@@ -10,9 +10,12 @@ import zely.parkinglotspring.model.account.Person;
 import zely.parkinglotspring.model.address.Address;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
 import zely.parkinglotspring.model.parkingspot.*;
+import zely.parkinglotspring.model.parkingticket.ParkingTicket;
+import zely.parkinglotspring.model.vehicle.*;
 import zely.parkinglotspring.repository.account.AccountRepository;
 import zely.parkinglotspring.repository.parkinglot.ParkingLotRepository;
 import zely.parkinglotspring.repository.parkingspot.ParkingSpotRepository;
+import zely.parkinglotspring.repository.vehicle.VehicleRepository;
 
 import static zely.parkinglotspring.model.account.AccountStatus.*;
 
@@ -26,7 +29,8 @@ public class ParkinglotspringApplication {
     @Bean
     public CommandLineRunner insertData(AccountRepository accountRepository,
                                         ParkingLotRepository parkingLotRepository,
-                                        ParkingSpotRepository parkingSpotRepository) {
+                                        ParkingSpotRepository parkingSpotRepository,
+                                        VehicleRepository vehicleRepository) {
         return args -> {
 
             Faker faker = new Faker();
@@ -43,7 +47,34 @@ public class ParkinglotspringApplication {
 
             createParkingSpot(parkingSpotRepository, parkingLot, 3, "compact");
 
+            createVehicle(vehicleRepository, 4, "car", faker);
+            createVehicle(vehicleRepository, 3, "truck", faker);
+            createVehicle(vehicleRepository, 2, "van", faker);
+            createVehicle(vehicleRepository, 2, "moto", faker);
         };
+    }
+
+    private static void createVehicle(VehicleRepository vehicleRepository, Integer numberOfVehicles, String vehicleType, Faker faker) {
+        Vehicle vehicle = null;
+        String randomLicenseNumber = "###-###";
+        for (int i = 0; i < numberOfVehicles; i++){
+            if (vehicleType.equals("car")){
+                vehicle = new Car();
+                vehicle.setLicenseNo(faker.numerify(randomLicenseNumber));
+            } else if (vehicleType.equals("moto")){
+                vehicle = new Moto();
+                vehicle.setLicenseNo(faker.numerify(randomLicenseNumber));
+            } else if (vehicleType.equals("van")){
+                vehicle = new Van();
+                vehicle.setLicenseNo(faker.numerify(randomLicenseNumber));
+            } else if (vehicleType.equals("truck")){
+                vehicle = new Truck();
+                vehicle.setLicenseNo(faker.numerify(randomLicenseNumber));
+            } else {
+                throw new RuntimeException("Vehicle type not valid");
+            }
+            vehicleRepository.save(vehicle);
+        }
     }
 
     private static void createParkingSpot(ParkingSpotRepository parkingSpotRepository,

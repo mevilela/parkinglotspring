@@ -33,4 +33,9 @@ public class ParkingSpotService {
         return parkingSpotRepository.save(parkingSpot);
 
     }
+
+    public ParkingSpot getParkingSpotByType(String spotType) {
+
+        return parkingSpotRepository.getParkingSpotBySpotType(spotType);
+    }
 }

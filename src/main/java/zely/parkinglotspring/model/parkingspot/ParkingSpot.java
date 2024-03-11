@@ -8,6 +8,7 @@ import zely.parkinglotspring.model.account.Admin;
 import zely.parkinglotspring.model.account.Customer;
 import zely.parkinglotspring.model.account.ParkingAgent;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
+import zely.parkinglotspring.model.vehicle.Vehicle;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "spot_type")
 @JsonSubTypes({
@@ -30,6 +31,9 @@ public abstract class ParkingSpot {
     @ManyToOne
     @JoinColumn(name = "parking_lot_id")
     private ParkingLot parkingLot;
+
+    @OneToOne(mappedBy = "parkingSpot")
+    private Vehicle vehicle;
 
     public ParkingSpot(){
 

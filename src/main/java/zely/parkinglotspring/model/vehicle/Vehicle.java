@@ -1,45 +1,63 @@
-//package model.vehicle;
-//
-//
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.Id;
-//import model.ParkingTicket;
-//
-//@Entity
-//public abstract class Vehicle {
-//
-//
-//    @Id
-//    private Integer id;
-//
-//    private String licenseNo;
-//
-//    public abstract void assignTicket(ParkingTicket ticket);
-//
-//
-//    public Vehicle() {
-//    }
-//
-//    public Vehicle(Integer id, String licenseNo) {
-//        this.id = id;
-//        this.licenseNo = licenseNo;
-//    }
-//
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
-//
-//    public String getLicenseNo() {
-//        return licenseNo;
-//    }
-//
-//    public void setLicenseNo(String licenseNo) {
-//        this.licenseNo = licenseNo;
-//    }
-//
-//
-//}
+package zely.parkinglotspring.model.vehicle;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import zely.parkinglotspring.model.parkingspot.*;
+import zely.parkinglotspring.model.parkingticket.ParkingTicket;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "vehicle_type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Car.class, name = "car"),
+        @JsonSubTypes.Type(value = Moto.class, name = "moto"),
+        @JsonSubTypes.Type(value = Truck.class, name = "truck"),
+        @JsonSubTypes.Type(value = Van.class, name = "van")
+})
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "vehicle_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class Vehicle {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private Integer id;
+
+    private String licenseNo;
+
+    @OneToOne
+    @JoinColumn(name = "parking_spot_id")
+    private ParkingSpot parkingSpot;
+
+
+    public abstract void assignTicket(ParkingTicket ticket);
+
+    public Vehicle() {
+    }
+
+    public Vehicle(String licenseNo) {
+        this.licenseNo = licenseNo;
+    }
+
+    public ParkingSpot getParkingSpot() {
+        return parkingSpot;
+    }
+
+    public void setParkingSpot(ParkingSpot parkingSpot) {
+        this.parkingSpot = parkingSpot;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getLicenseNo() {
+        return licenseNo;
+    }
+
+    public void setLicenseNo(String licenseNo) {
+        this.licenseNo = licenseNo;
+    }
+
+
+}
