@@ -31,7 +31,7 @@ public class AccountController {
         return accountService.newAccount(account);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable Integer id){
 
         accountService.deleteAccountById(id);
