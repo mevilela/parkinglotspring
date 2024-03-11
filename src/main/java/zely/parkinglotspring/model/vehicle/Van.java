@@ -4,11 +4,13 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @DiscriminatorValue("van")
 public class Van extends Vehicle{
     @Override
     public void assignTicket(ParkingTicket ticket) {
-
     }
 }

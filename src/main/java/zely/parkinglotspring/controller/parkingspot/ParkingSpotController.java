@@ -26,10 +26,6 @@ public class ParkingSpotController {
        return ResponseEntity.ok(parkingSpotService.getAllParkingSpots());
     }
 
-//    @GetMapping("/type")
-//    public ResponseEntity<ParkingSpot> getParkingSpotByType(String spotType){
-//        return ResponseEntity.ok(parkingSpotService.getParkingSpotByType(spotType));
-//    }
 
     @PostMapping("/") //todo apenas o admin pode fazer essa operação
     public ResponseEntity<?> createNewSpot(@RequestBody ParkingSpot parkingSpot){

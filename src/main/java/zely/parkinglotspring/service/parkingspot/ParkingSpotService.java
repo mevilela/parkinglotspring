@@ -34,8 +34,4 @@ public class ParkingSpotService {
 
     }
 
-//    public ParkingSpot getParkingSpotByType(String spotType) {
-//
-//        return parkingSpotRepository.getParkingSpotBySpotType(spotType);
-//    }
 }

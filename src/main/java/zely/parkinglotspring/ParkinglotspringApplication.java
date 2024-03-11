@@ -11,15 +11,22 @@ import zely.parkinglotspring.model.address.Address;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
 import zely.parkinglotspring.model.parkingspot.*;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
+import zely.parkinglotspring.model.payment.Cash;
+import zely.parkinglotspring.model.payment.Payment;
+import zely.parkinglotspring.model.payment.PaymentStatus;
 import zely.parkinglotspring.model.vehicle.*;
+import zely.parkinglotspring.repository.payment.PaymentRepository;
 import zely.parkinglotspring.repository.account.AccountRepository;
 import zely.parkinglotspring.repository.parkinglot.ParkingLotRepository;
 import zely.parkinglotspring.repository.parkingspot.ParkingSpotRepository;
+import zely.parkinglotspring.repository.parkingticket.ParkingTicketRepository;
 import zely.parkinglotspring.repository.vehicle.VehicleRepository;
 
 import java.util.List;
 
 import static zely.parkinglotspring.model.account.AccountStatus.*;
+import static zely.parkinglotspring.model.payment.PaymentStatus.COMPLETED;
+import static zely.parkinglotspring.model.payment.PaymentStatus.UNPAID;
 
 @SpringBootApplication
 public class ParkinglotspringApplication {
@@ -32,7 +39,9 @@ public class ParkinglotspringApplication {
     public CommandLineRunner insertData(AccountRepository accountRepository,
                                         ParkingLotRepository parkingLotRepository,
                                         ParkingSpotRepository parkingSpotRepository,
-                                        VehicleRepository vehicleRepository) {
+                                        VehicleRepository vehicleRepository,
+                                        ParkingTicketRepository parkingTicketRepository,
+                                        PaymentRepository paymentRepository){
         return args -> {
 
             Faker faker = new Faker();
@@ -55,18 +64,47 @@ public class ParkinglotspringApplication {
             vehicle = vehicleRepository.save(vehicle);
 
             List<ParkingSpot> freeCompactParkingSpots = parkingSpotRepository.getParkingSpotsBySpotType(Compact.class);
-            ParkingSpot freeCompactParkingSpot = freeCompactParkingSpots.get(0);
-            vehicle.setParkingSpot(freeCompactParkingSpot);
-            vehicleRepository.save(vehicle);
-            freeCompactParkingSpot.setFree(false);
-            parkingSpotRepository.save(freeCompactParkingSpot);
+            if(!freeCompactParkingSpots.isEmpty()) {
+                ParkingSpot freeCompactParkingSpot = freeCompactParkingSpots.get(0);
+                vehicle.setParkingSpot(freeCompactParkingSpot);
+                vehicleRepository.save(vehicle);
+                freeCompactParkingSpot.setFree(false);
+                parkingSpotRepository.save(freeCompactParkingSpot);
+
+            } else {
+                throw new RuntimeException("ParkingSpot not avaiable");
+            }
+
+            ParkingTicket ticket = new ParkingTicket();
+            Payment cashPaidTicket = new Cash();
+
+            ticket.setPayment(cashPaidTicket);
+
+            ticket.setRate(2);
+            ticket.setAmount(10.00);
+            ticket.setVehicle(vehicle);
+
+            parkingTicketRepository.save(ticket);
+
+            cashPaidTicket.setParkingTicket(ticket);
+            cashPaidTicket.setAmount(10.00);
+            cashPaidTicket.setPaymentStatus(UNPAID);
+
+            paymentRepository.save(cashPaidTicket);
+
+            vehicle.assignTicket(ticket);
+
+            parkingTicketRepository.save(ticket);
+
+
+        };
+    }
 
 //            createVehicle(vehicleRepository, 4, "car", faker);
 //            createVehicle(vehicleRepository, 3, "truck", faker);
 //            createVehicle(vehicleRepository, 2, "van", faker);
 //            createVehicle(vehicleRepository, 2, "moto", faker);
-        };
-    }
+
 
     private static void createVehicle(VehicleRepository vehicleRepository, Integer numberOfVehicles, String vehicleType, Faker faker) {
         Vehicle vehicle = null;
