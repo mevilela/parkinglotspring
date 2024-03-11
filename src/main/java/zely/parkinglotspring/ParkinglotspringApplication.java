@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import zely.parkinglotspring.model.account.Admin;
 import zely.parkinglotspring.model.account.Person;
 import zely.parkinglotspring.model.address.Address;
+import zely.parkinglotspring.model.entrance.Entrance;
+import zely.parkinglotspring.model.exit.Exit;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
 import zely.parkinglotspring.model.parkingspot.*;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
@@ -15,6 +17,8 @@ import zely.parkinglotspring.model.payment.Cash;
 import zely.parkinglotspring.model.payment.Payment;
 import zely.parkinglotspring.model.payment.PaymentStatus;
 import zely.parkinglotspring.model.vehicle.*;
+import zely.parkinglotspring.repository.entrance.EntranceRepository;
+import zely.parkinglotspring.repository.exit.ExitRepository;
 import zely.parkinglotspring.repository.payment.PaymentRepository;
 import zely.parkinglotspring.repository.account.AccountRepository;
 import zely.parkinglotspring.repository.parkinglot.ParkingLotRepository;
@@ -41,7 +45,9 @@ public class ParkinglotspringApplication {
                                         ParkingSpotRepository parkingSpotRepository,
                                         VehicleRepository vehicleRepository,
                                         ParkingTicketRepository parkingTicketRepository,
-                                        PaymentRepository paymentRepository){
+                                        PaymentRepository paymentRepository,
+                                        EntranceRepository entranceRepository,
+                                        ExitRepository exitRepository){
         return args -> {
 
             Faker faker = new Faker();
@@ -58,46 +64,83 @@ public class ParkinglotspringApplication {
 
             createParkingSpot(parkingSpotRepository, parkingLot, 3, "compact");
 
-            String randomLicenseNumber = "###-###";
-            Vehicle vehicle = new Car();
-            vehicle.setLicenseNo(faker.numerify(randomLicenseNumber));
-            vehicle = vehicleRepository.save(vehicle);
+            Vehicle vehicle = createFakeVehicle(vehicleRepository, faker);
 
-            List<ParkingSpot> freeCompactParkingSpots = parkingSpotRepository.getParkingSpotsBySpotType(Compact.class);
-            if(!freeCompactParkingSpots.isEmpty()) {
-                ParkingSpot freeCompactParkingSpot = freeCompactParkingSpots.get(0);
-                vehicle.setParkingSpot(freeCompactParkingSpot);
-                vehicleRepository.save(vehicle);
-                freeCompactParkingSpot.setFree(false);
-                parkingSpotRepository.save(freeCompactParkingSpot);
+            takingACompactSpot(parkingSpotRepository, vehicleRepository, vehicle);
 
-            } else {
-                throw new RuntimeException("ParkingSpot not avaiable");
-            }
-
+            //creating ticket
             ParkingTicket ticket = new ParkingTicket();
+            //creating payment method fot the ticket
             Payment cashPaidTicket = new Cash();
-
+            //saving payment method
             ticket.setPayment(cashPaidTicket);
-
+            //setting ticket
             ticket.setRate(2);
             ticket.setAmount(10.00);
+            //setting a vehicle fot the ticket
             ticket.setVehicle(vehicle);
-
-            parkingTicketRepository.save(ticket);
-
-            cashPaidTicket.setParkingTicket(ticket);
-            cashPaidTicket.setAmount(10.00);
-            cashPaidTicket.setPaymentStatus(UNPAID);
-
-            paymentRepository.save(cashPaidTicket);
-
             vehicle.assignTicket(ticket);
 
+            //saving ticket
+            parkingTicketRepository.save(ticket);
+
+            //Adding an Entrance
+            Entrance entrance = new Entrance();
+            //Adding a ticket for the getTicket method
+            entrance.getTickets().add(ticket);
+            //Setting an Entrance for the ticket
+            ticket.setEntrance(entrance);
+
+            //saving Entrance
+            entranceRepository.save(entrance);
+
+            //setting a ticket fot the payment method
+            cashPaidTicket.setParkingTicket(ticket);
+            //setting payment amount
+            cashPaidTicket.setAmount(10.00);
+            //setting payment status
+            cashPaidTicket.setPaymentStatus(COMPLETED);
+
+            //saving payment
+            paymentRepository.save(cashPaidTicket);
+
+            //adding Exit
+            Exit exit = new Exit();
+            //adding a ticket for the exit method
+            exit.getTickets().add(ticket);
+            //setting an exit for the ticket
+            ticket.setExit(exit);
+
+            //saving exit
+            exitRepository.save(exit);
+
+            //saving ticket
             parkingTicketRepository.save(ticket);
 
 
         };
+    }
+
+    private static void takingACompactSpot(ParkingSpotRepository parkingSpotRepository, VehicleRepository vehicleRepository, Vehicle vehicle) {
+        List<ParkingSpot> freeCompactParkingSpots = parkingSpotRepository.getParkingSpotsBySpotType(Compact.class);
+        if(!freeCompactParkingSpots.isEmpty()) {
+            ParkingSpot freeCompactParkingSpot = freeCompactParkingSpots.get(0);
+            vehicle.setParkingSpot(freeCompactParkingSpot);
+            vehicleRepository.save(vehicle);
+            freeCompactParkingSpot.setFree(false);
+            parkingSpotRepository.save(freeCompactParkingSpot);
+
+        } else {
+            throw new RuntimeException("ParkingSpot not avaiable");
+        }
+    }
+
+    private static Vehicle createFakeVehicle(VehicleRepository vehicleRepository, Faker faker) {
+        String randomLicenseNumber = "###-###";
+        Vehicle vehicle = new Car();
+        vehicle.setLicenseNo(faker.numerify(randomLicenseNumber));
+        vehicle = vehicleRepository.save(vehicle);
+        return vehicle;
     }
 
 //            createVehicle(vehicleRepository, 4, "car", faker);

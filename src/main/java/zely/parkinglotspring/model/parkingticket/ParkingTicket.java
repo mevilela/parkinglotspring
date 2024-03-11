@@ -3,6 +3,8 @@ package zely.parkinglotspring.model.parkingticket;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import zely.parkinglotspring.model.entrance.Entrance;
+import zely.parkinglotspring.model.exit.Exit;
 import zely.parkinglotspring.model.payment.Payment;
 import zely.parkinglotspring.model.payment.PaymentStatus;
 import zely.parkinglotspring.model.vehicle.Vehicle;
@@ -33,10 +35,14 @@ public class ParkingTicket {
 
     @OneToOne(mappedBy = "parkingTicket", cascade = CascadeType.ALL)
     private Payment payment;
-//
-//    private Entrance entrance;
-//
-//    private Exit exit;
+
+    @ManyToOne
+    @JoinColumn(name = "entrance_id")
+    private Entrance entrance;
+
+    @ManyToOne
+    @JoinColumn(name = "exit_id")
+    private Exit exit;
 
 
     public ParkingTicket() {
@@ -49,6 +55,14 @@ public class ParkingTicket {
         this.rate = rate;
         this.amount = amount;
         this.vehicle = vehicle;
+    }
+
+    public Entrance getEntrance() {
+        return entrance;
+    }
+
+    public void setEntrance(Entrance entrance) {
+        this.entrance = entrance;
     }
 
     public Integer getTicketNumber() {
@@ -102,5 +116,13 @@ public class ParkingTicket {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Exit getExit() {
+        return exit;
+    }
+
+    public void setExit(Exit exit) {
+        this.exit = exit;
     }
 }

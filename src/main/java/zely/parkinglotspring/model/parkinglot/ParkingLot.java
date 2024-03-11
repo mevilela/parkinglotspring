@@ -3,6 +3,7 @@ package zely.parkinglotspring.model.parkinglot;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import zely.parkinglotspring.model.address.Address;
+import zely.parkinglotspring.model.parkingrate.ParkingRate;
 import zely.parkinglotspring.model.parkingspot.ParkingSpot;
 
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public class ParkingLot {
     @OneToMany
     @JoinColumn(name = "parking_lot_id")
     private List<ParkingSpot> parkingSpots = new ArrayList<>();
+
+    @OneToMany(mappedBy = "parkingLot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ParkingRate> parkingRates;
 
     public ParkingLot() {
     }
