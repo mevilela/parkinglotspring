@@ -3,6 +3,9 @@ package zely.parkinglotspring.model.parkingrate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
+import zely.parkinglotspring.model.parkingticket.ParkingTicket;
+
+import java.util.List;
 
 @Entity
 public class ParkingRate {
@@ -14,21 +17,21 @@ public class ParkingRate {
 
     private double hours;
 
-    private double rate;
+    private double parkingRate;
 
     @ManyToOne
     @JoinColumn(name = "parking_lot_id")
     private ParkingLot parkingLot;
 
-   // public void calculate(){}
-
+    @OneToMany(mappedBy = "parkingRate")
+    private List<ParkingTicket> tickets;
 
     public ParkingRate() {
     }
 
-    public ParkingRate(double hours, double rate, ParkingLot parkingLot) {
+    public ParkingRate(double hours, double parkingRate, ParkingLot parkingLot) {
         this.hours = hours;
-        this.rate = rate;
+        this.parkingRate = parkingRate;
         this.parkingLot = parkingLot;
     }
 
@@ -44,12 +47,12 @@ public class ParkingRate {
         this.hours = hours;
     }
 
-    public double getRate() {
-        return rate;
+    public double getParkingRate() {
+        return parkingRate;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setParkingRate(double parkingRate) {
+        this.parkingRate = parkingRate;
     }
 
     public ParkingLot getParkingLot() {
@@ -58,5 +61,13 @@ public class ParkingRate {
 
     public void setParkingLot(ParkingLot parkingLot) {
         this.parkingLot = parkingLot;
+    }
+
+    public List<ParkingTicket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<ParkingTicket> tickets) {
+        this.tickets = tickets;
     }
 }

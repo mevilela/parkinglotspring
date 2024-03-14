@@ -8,17 +8,20 @@ import org.springframework.context.annotation.Bean;
 import zely.parkinglotspring.model.account.Admin;
 import zely.parkinglotspring.model.account.Person;
 import zely.parkinglotspring.model.address.Address;
+import zely.parkinglotspring.model.displayboard.DisplayBoard;
 import zely.parkinglotspring.model.entrance.Entrance;
 import zely.parkinglotspring.model.exit.Exit;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
+import zely.parkinglotspring.model.parkingrate.ParkingRate;
 import zely.parkinglotspring.model.parkingspot.*;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
 import zely.parkinglotspring.model.payment.Cash;
 import zely.parkinglotspring.model.payment.Payment;
-import zely.parkinglotspring.model.payment.PaymentStatus;
 import zely.parkinglotspring.model.vehicle.*;
+import zely.parkinglotspring.repository.displayboard.DisplayBoardRepository;
 import zely.parkinglotspring.repository.entrance.EntranceRepository;
 import zely.parkinglotspring.repository.exit.ExitRepository;
+import zely.parkinglotspring.repository.parkinrate.ParkingRateRepository;
 import zely.parkinglotspring.repository.payment.PaymentRepository;
 import zely.parkinglotspring.repository.account.AccountRepository;
 import zely.parkinglotspring.repository.parkinglot.ParkingLotRepository;
@@ -26,11 +29,15 @@ import zely.parkinglotspring.repository.parkingspot.ParkingSpotRepository;
 import zely.parkinglotspring.repository.parkingticket.ParkingTicketRepository;
 import zely.parkinglotspring.repository.vehicle.VehicleRepository;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static zely.parkinglotspring.model.account.AccountStatus.*;
 import static zely.parkinglotspring.model.payment.PaymentStatus.COMPLETED;
-import static zely.parkinglotspring.model.payment.PaymentStatus.UNPAID;
 
 @SpringBootApplication
 public class ParkinglotspringApplication {
@@ -47,7 +54,9 @@ public class ParkinglotspringApplication {
                                         ParkingTicketRepository parkingTicketRepository,
                                         PaymentRepository paymentRepository,
                                         EntranceRepository entranceRepository,
-                                        ExitRepository exitRepository){
+                                        ExitRepository exitRepository,
+                                        DisplayBoardRepository displayBoardRepository,
+                                        ParkingRateRepository parkingRateRepository){
         return args -> {
 
             Faker faker = new Faker();
@@ -56,17 +65,18 @@ public class ParkinglotspringApplication {
 
             ParkingLot parkingLot = createParkingLot(parkingLotRepository, faker);
 
-            createParkingSpot(parkingSpotRepository, parkingLot, 2, "handicapped");
+            //setting DisplayBoard
+            createDisplayBoard(displayBoardRepository, parkingLot);
 
-            createParkingSpot(parkingSpotRepository, parkingLot, 3, "motorcycle");
-
-            createParkingSpot(parkingSpotRepository, parkingLot, 2, "large");
-
-            createParkingSpot(parkingSpotRepository, parkingLot, 3, "compact");
+            createParkingSpots(parkingSpotRepository, parkingLot);
 
             Vehicle vehicle = createFakeVehicle(vehicleRepository, faker);
 
-            takingACompactSpot(parkingSpotRepository, vehicleRepository, vehicle);
+            findFreeCompactSpotAndParkVehicle(parkingSpotRepository, vehicleRepository, vehicle);
+
+            ParkingRate parkingRate = new ParkingRate(2.0,2.0,parkingLot);
+            parkingRateRepository.save(parkingRate);
+
 
             //creating ticket
             ParkingTicket ticket = new ParkingTicket();
@@ -75,8 +85,9 @@ public class ParkinglotspringApplication {
             //saving payment method
             ticket.setPayment(cashPaidTicket);
             //setting ticket
-            ticket.setRate(2);
-            ticket.setAmount(10.00);
+            ticket.setParkingRate(parkingRate);
+            //seeting timestamp
+            ticket.setTimestamp(LocalDateTime.of(2024,03,12,14,00,00));
             //setting a vehicle fot the ticket
             ticket.setVehicle(vehicle);
             vehicle.assignTicket(ticket);
@@ -94,10 +105,20 @@ public class ParkinglotspringApplication {
             //saving Entrance
             entranceRepository.save(entrance);
 
+            ticket.setExit_time(LocalDateTime.of(2024,03,12,21,00,00));
+
             //setting a ticket fot the payment method
             cashPaidTicket.setParkingTicket(ticket);
+
             //setting payment amount
-            cashPaidTicket.setAmount(10.00);
+            double parkingHours = ticket.getTimestamp().until(ticket.getExit_time(), ChronoUnit.HOURS);
+
+            double amount = parkingHours * ticket.getParkingRate().getParkingRate();
+
+            ticket.setAmount(amount);
+
+            parkingTicketRepository.save(ticket);
+
             //setting payment status
             cashPaidTicket.setPaymentStatus(COMPLETED);
 
@@ -118,10 +139,47 @@ public class ParkinglotspringApplication {
             parkingTicketRepository.save(ticket);
 
 
+
+
+
+
+            List<ParkingSpot> parkingSpotList = (List<ParkingSpot>) parkingSpotRepository.findAll();
+            Map<String, Long> freeSpotsByType = new HashMap<>();
+
+            //counting freeSpots by type
+            Long compacts = parkingSpotRepository.getParkingSpotsBySpotType(Compact.class).stream().count();
+            Long handicappeds = parkingSpotRepository.getParkingSpotsBySpotType(Handicapped.class).stream().count();
+            Long larges = parkingSpotRepository.getParkingSpotsBySpotType(Large.class).stream().count();
+            Long motos = parkingSpotRepository.getParkingSpotsBySpotType(Motorcycle.class).stream().count();
+
+            //adding spots
+            freeSpotsByType.put("Compact", compacts);
+            freeSpotsByType.put("Handicapped", handicappeds);
+            freeSpotsByType.put("Large", larges);
+            freeSpotsByType.put("Motorcycle", motos);
+
         };
     }
 
-    private static void takingACompactSpot(ParkingSpotRepository parkingSpotRepository, VehicleRepository vehicleRepository, Vehicle vehicle) {
+
+    private static void createParkingSpots(ParkingSpotRepository parkingSpotRepository, ParkingLot parkingLot) {
+        createParkingSpotBySpotType(parkingSpotRepository, parkingLot, 2, "handicapped");
+
+        createParkingSpotBySpotType(parkingSpotRepository, parkingLot, 3, "motorcycle");
+
+        createParkingSpotBySpotType(parkingSpotRepository, parkingLot, 2, "large");
+
+        createParkingSpotBySpotType(parkingSpotRepository, parkingLot, 3, "compact");
+    }
+
+    private static void createDisplayBoard(DisplayBoardRepository displayBoardRepository, ParkingLot parkingLot) {
+        DisplayBoard displayBoard = new DisplayBoard();
+        displayBoard.setParkingLot(parkingLot);
+        parkingLot.setDisplayBoard(displayBoard);
+        displayBoardRepository.save(displayBoard);
+    }
+
+    private static void findFreeCompactSpotAndParkVehicle(ParkingSpotRepository parkingSpotRepository, VehicleRepository vehicleRepository, Vehicle vehicle) {
         List<ParkingSpot> freeCompactParkingSpots = parkingSpotRepository.getParkingSpotsBySpotType(Compact.class);
         if(!freeCompactParkingSpots.isEmpty()) {
             ParkingSpot freeCompactParkingSpot = freeCompactParkingSpots.get(0);
@@ -172,9 +230,9 @@ public class ParkinglotspringApplication {
         }
     }
 
-    private static void createParkingSpot(ParkingSpotRepository parkingSpotRepository,
-                                          ParkingLot parkingLot,
-                                          Integer numberOfSpots, String spotType) {
+    private static void createParkingSpotBySpotType(ParkingSpotRepository parkingSpotRepository,
+                                                    ParkingLot parkingLot,
+                                                    Integer numberOfSpots, String spotType) {
         ParkingSpot parkingSpot = null;
 
         for(int i = 0; i < numberOfSpots; i++) {

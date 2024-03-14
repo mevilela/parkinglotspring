@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import zely.parkinglotspring.model.entrance.Entrance;
 import zely.parkinglotspring.model.exit.Exit;
+import zely.parkinglotspring.model.parkingrate.ParkingRate;
 import zely.parkinglotspring.model.payment.Payment;
-import zely.parkinglotspring.model.payment.PaymentStatus;
 import zely.parkinglotspring.model.vehicle.Vehicle;
 
 import java.time.LocalDateTime;
@@ -23,7 +23,9 @@ public class ParkingTicket {
 
     private LocalDateTime exit_time;
 
-    private double rate;
+    @ManyToOne
+    @JoinColumn(name = "parking_rate_id")
+    private ParkingRate parkingRate;
 
     private double amount;
 
@@ -48,26 +50,22 @@ public class ParkingTicket {
     public ParkingTicket() {
     }
 
-    public ParkingTicket(Integer ticketNumber, LocalDateTime timestamp, LocalDateTime exit_time, double rate, double amount, boolean status, Vehicle vehicle) {
+    public ParkingTicket(LocalDateTime timestamp, LocalDateTime exit_time, ParkingRate parkingRate, double amount, Vehicle vehicle, Payment payment, Entrance entrance, Exit exit) {
         this.ticketNumber = ticketNumber;
         this.timestamp = timestamp;
         this.exit_time = exit_time;
-        this.rate = rate;
+        this.parkingRate = parkingRate;
         this.amount = amount;
         this.vehicle = vehicle;
-    }
-
-    public Entrance getEntrance() {
-        return entrance;
-    }
-
-    public void setEntrance(Entrance entrance) {
+        this.payment = payment;
         this.entrance = entrance;
+        this.exit = exit;
     }
 
     public Integer getTicketNumber() {
         return ticketNumber;
     }
+
 
     public LocalDateTime getTimestamp() {
         return timestamp;
@@ -85,12 +83,12 @@ public class ParkingTicket {
         this.exit_time = exit_time;
     }
 
-    public double getRate() {
-        return rate;
+    public ParkingRate getParkingRate() {
+        return parkingRate;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setParkingRate(ParkingRate parkingRate) {
+        this.parkingRate = parkingRate;
     }
 
     public double getAmount() {
@@ -100,7 +98,6 @@ public class ParkingTicket {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-
 
     public Vehicle getVehicle() {
         return vehicle;
@@ -116,6 +113,14 @@ public class ParkingTicket {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Entrance getEntrance() {
+        return entrance;
+    }
+
+    public void setEntrance(Entrance entrance) {
+        this.entrance = entrance;
     }
 
     public Exit getExit() {
