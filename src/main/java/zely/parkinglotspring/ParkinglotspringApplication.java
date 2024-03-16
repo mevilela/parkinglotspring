@@ -30,7 +30,6 @@ import zely.parkinglotspring.repository.parkingticket.ParkingTicketRepository;
 import zely.parkinglotspring.repository.vehicle.VehicleRepository;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
@@ -137,10 +136,6 @@ public class ParkinglotspringApplication {
 
             //saving ticket
             parkingTicketRepository.save(ticket);
-
-
-
-
 
 
             List<ParkingSpot> parkingSpotList = (List<ParkingSpot>) parkingSpotRepository.findAll();

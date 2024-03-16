@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zely.parkinglotspring.model.account.*;
+import zely.parkinglotspring.model.parkingspot.ParkingSpot;
 import zely.parkinglotspring.service.account.AccountService;
 
 import java.util.List;
@@ -29,6 +30,14 @@ public class AccountController {
     @PostMapping("/")
     public Account newAccount(@RequestBody Account account) {
         return accountService.newAccount(account);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAccount(@PathVariable Integer id, @RequestBody Account account){
+
+        Account updatedAccount = accountService.updateAccountById(id, account);
+
+        return new ResponseEntity<>(updatedAccount, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
