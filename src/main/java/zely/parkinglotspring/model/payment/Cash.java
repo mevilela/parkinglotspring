@@ -7,4 +7,5 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("cash")
 public class Cash extends Payment{
+
 }

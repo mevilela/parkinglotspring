@@ -8,6 +8,7 @@ import zely.parkinglotspring.model.vehicle.Vehicle;
 import zely.parkinglotspring.service.parkingspot.ParkingSpotService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/parking-spot")
@@ -35,5 +36,14 @@ public class ParkingSpotController {
         return new ResponseEntity<>(createdSpot, HttpStatus.CREATED);
 
     }
+
+    @PostMapping("/park")
+    ResponseEntity<ParkingSpot> parkVehicle(@RequestParam Integer vehicleId, @RequestParam Integer spotId) {
+
+        ParkingSpot parkedSpot = parkingSpotService.parkVehicle(vehicleId, spotId);
+
+        return new ResponseEntity<>(parkedSpot, HttpStatus.CREATED);
+    }
+
 
 }

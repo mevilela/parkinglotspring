@@ -27,7 +27,7 @@ public class AccountController {
         return accountService.getAllAccounts();
     }
 
-    @PostMapping("/")
+    @PostMapping("/") //todo apenas admin pode criar
     public Account newAccount(@RequestBody Account account) {
         return accountService.newAccount(account);
     }
@@ -58,9 +58,9 @@ public class AccountController {
 //      //view account - done
 
 // customer
-//    //take ticket
-//    //scan ticket
-//    //pay ticket
+//    //take ticket -
+//    //scan ticket -
+//    //pay ticket -
 //        //cash
 //        //credit
 //    //park vehicle
@@ -69,9 +69,9 @@ public class AccountController {
 ////    /* update account
 ////     * login / logout
 ////     * view account
-////     * take ticket
-////     * scan ticket
-////     * pay ticket
+////     * take ticket -
+////     * scan ticket -
+////     * pay ticket -
 ////     *   *cash
 ////     *   *credit card
 ////     * park vehicle

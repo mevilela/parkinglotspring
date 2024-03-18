@@ -1,5 +1,6 @@
 package zely.parkinglotspring.model.parkingticket;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -21,7 +22,7 @@ public class ParkingTicket {
 
     private LocalDateTime timestamp;
 
-    private LocalDateTime exit_time;
+    private LocalDateTime exitTime;
 
     @ManyToOne
     @JoinColumn(name = "parking_rate_id")
@@ -32,7 +33,6 @@ public class ParkingTicket {
 
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
-    @JsonIgnore
     private Vehicle vehicle;
 
     @OneToOne(mappedBy = "parkingTicket", cascade = CascadeType.ALL)
@@ -50,10 +50,9 @@ public class ParkingTicket {
     public ParkingTicket() {
     }
 
-    public ParkingTicket(LocalDateTime timestamp, LocalDateTime exit_time, ParkingRate parkingRate, double amount, Vehicle vehicle, Payment payment, Entrance entrance, Exit exit) {
-        this.ticketNumber = ticketNumber;
+    public ParkingTicket(LocalDateTime timestamp, LocalDateTime exitTime, ParkingRate parkingRate, double amount, Vehicle vehicle, Payment payment, Entrance entrance, Exit exit) {
         this.timestamp = timestamp;
-        this.exit_time = exit_time;
+        this.exitTime = exitTime;
         this.parkingRate = parkingRate;
         this.amount = amount;
         this.vehicle = vehicle;
@@ -75,12 +74,12 @@ public class ParkingTicket {
         this.timestamp = timestamp;
     }
 
-    public LocalDateTime getExit_time() {
-        return exit_time;
+    public LocalDateTime getExitTime() {
+        return exitTime;
     }
 
-    public void setExit_time(LocalDateTime exit_time) {
-        this.exit_time = exit_time;
+    public void setExitTime(LocalDateTime exitTime) {
+        this.exitTime = exitTime;
     }
 
     public ParkingRate getParkingRate() {
@@ -130,4 +129,5 @@ public class ParkingTicket {
     public void setExit(Exit exit) {
         this.exit = exit;
     }
+
 }

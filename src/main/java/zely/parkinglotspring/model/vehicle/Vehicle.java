@@ -1,6 +1,7 @@
 package zely.parkinglotspring.model.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +24,7 @@ import java.util.List;
 public abstract class Vehicle {
     @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    //@Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer id;
 
     private String licenseNo;
@@ -34,6 +35,7 @@ public abstract class Vehicle {
     private ParkingSpot parkingSpot;
 
     @OneToMany(mappedBy = "vehicle")
+    @JsonIgnore
     private List<ParkingTicket> parkingTickets;
 
 

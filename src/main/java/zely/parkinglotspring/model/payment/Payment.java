@@ -1,6 +1,7 @@
 package zely.parkinglotspring.model.payment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -32,9 +33,6 @@ public abstract class Payment {
     @JoinColumn(name = "parking_ticket_id")
     @JsonIgnore
     private ParkingTicket parkingTicket;
-
-
-    //initiate transaction(){}
 
 
     public Payment() {

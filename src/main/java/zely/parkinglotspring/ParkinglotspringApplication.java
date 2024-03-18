@@ -85,10 +85,9 @@ public class ParkinglotspringApplication {
             ticket.setPayment(cashPaidTicket);
             //setting ticket
             ticket.setParkingRate(parkingRate);
-            //seeting timestamp
+            //setting timestamp
             ticket.setTimestamp(LocalDateTime.of(2024,03,12,14,00,00));
-            //setting a vehicle fot the ticket
-            ticket.setVehicle(vehicle);
+           // vehicle.assignTicket(ticket);
             vehicle.assignTicket(ticket);
 
             //saving ticket
@@ -104,13 +103,13 @@ public class ParkinglotspringApplication {
             //saving Entrance
             entranceRepository.save(entrance);
 
-            ticket.setExit_time(LocalDateTime.of(2024,03,12,21,00,00));
+            ticket.setExitTime(LocalDateTime.of(2024,03,12,21,00,00));
 
             //setting a ticket fot the payment method
             cashPaidTicket.setParkingTicket(ticket);
 
             //setting payment amount
-            double parkingHours = ticket.getTimestamp().until(ticket.getExit_time(), ChronoUnit.HOURS);
+            double parkingHours = ticket.getTimestamp().until(ticket.getExitTime(), ChronoUnit.HOURS);
 
             double amount = parkingHours * ticket.getParkingRate().getParkingRate();
 

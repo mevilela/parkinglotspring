@@ -1,5 +1,6 @@
 package zely.parkinglotspring.model.parkingrate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
@@ -21,12 +22,18 @@ public class ParkingRate {
 
     @ManyToOne
     @JoinColumn(name = "parking_lot_id")
+    @JsonIgnore
     private ParkingLot parkingLot;
 
     @OneToMany(mappedBy = "parkingRate")
+    @JsonIgnore
     private List<ParkingTicket> tickets;
 
     public ParkingRate() {
+    }
+
+    public ParkingRate( double parkingRate) {
+        this.parkingRate = parkingRate;
     }
 
     public ParkingRate(double hours, double parkingRate, ParkingLot parkingLot) {
