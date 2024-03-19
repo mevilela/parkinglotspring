@@ -55,12 +55,6 @@ public class ParkingTicketManager {
         }
 
 
-//        Optional<Vehicle> vehicleOptional = vehicleService.findById(createParkingTicketDTO.getVehicleId());
-//        if (vehicleOptional.isEmpty()){
-//            throw  new RuntimeException("Vehicle not found");
-//        }
-
-
         Entrance entrance = entranceService.createEntrance(new Entrance());
         parkingTicket.setEntrance(entrance);
 

@@ -1,6 +1,9 @@
 package zely.parkinglotspring.manager;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import zely.parkinglotspring.controller.parkingspot.ParkingSpotController;
+import zely.parkinglotspring.dto.ParkVehicleDto;
 import zely.parkinglotspring.model.parkingspot.ParkingSpot;
 import zely.parkinglotspring.model.vehicle.Vehicle;
 import zely.parkinglotspring.service.parkingspot.ParkingSpotService;
@@ -19,24 +22,26 @@ public class ParkingSpotManager {
         this.parkingSpotService = parkingSpotService;
     }
 
-    public ParkingSpot parkVehicle(ParkingSpot parkingSpot) {
+    @Transactional
+    public ParkingSpot parkVehicle(ParkVehicleDto parkVehicleDto) {
 
         // maybe also check the parking spot type
         // with the Vehicle type if they are allowed
 
-        Optional<Vehicle> optionalVehicleToPark = vehicleService.findById(parkingSpot.getVehicle().getId());
+        Optional<Vehicle> optionalVehicleToPark = vehicleService.findById(parkVehicleDto.getVehicleId());
 
         if (optionalVehicleToPark.isEmpty()){
             throw new RuntimeException("Vehicle not found");
         }
 
-        Optional<ParkingSpot> optionalSpot = parkingSpotService.findParkingSpotById(parkingSpot.getId());
+        Optional<ParkingSpot> optionalSpot = parkingSpotService.findParkingSpotById(parkVehicleDto.getSpotId());
 
         if (optionalSpot.isEmpty()){
             throw new RuntimeException("Spot not found");
         }
 
-        parkingSpot = optionalSpot.get();
+        ParkingSpot parkingSpot = optionalSpot.get();
+
 
         if(!parkingSpot.isFree()) {
             throw new RuntimeException("Parking Spot is not free!");

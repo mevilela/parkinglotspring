@@ -3,21 +3,23 @@ package zely.parkinglotspring.controller.parkingspot;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import zely.parkinglotspring.dto.ParkVehicleDto;
+import zely.parkinglotspring.manager.ParkingSpotManager;
 import zely.parkinglotspring.model.parkingspot.ParkingSpot;
-import zely.parkinglotspring.model.vehicle.Vehicle;
 import zely.parkinglotspring.service.parkingspot.ParkingSpotService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/parking-spot")
 public class ParkingSpotController {
 
     private final ParkingSpotService parkingSpotService;
+    private final ParkingSpotManager parkingSpotManager;
 
-    public ParkingSpotController(ParkingSpotService parkingSpotService) {
+    public ParkingSpotController(ParkingSpotService parkingSpotService, ParkingSpotManager parkingSpotManager) {
         this.parkingSpotService = parkingSpotService;
+        this.parkingSpotManager = parkingSpotManager;
     }
 
 
@@ -38,9 +40,9 @@ public class ParkingSpotController {
     }
 
     @PostMapping("/park")
-    ResponseEntity<ParkingSpot> parkVehicle(@RequestBody ParkingSpot parkingSpot) {
+    ResponseEntity<ParkingSpot> parkVehicle(@RequestBody ParkVehicleDto parkVehicleDto) {
 
-        ParkingSpot parkedSpot = parkingSpotService.parkVehicle(parkingSpot);
+        ParkingSpot parkedSpot = parkingSpotManager.parkVehicle(parkVehicleDto);
 
         return new ResponseEntity<>(parkedSpot, HttpStatus.CREATED);
     }

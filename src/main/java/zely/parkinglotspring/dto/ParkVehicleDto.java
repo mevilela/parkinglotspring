@@ -1,6 +1,6 @@
 package zely.parkinglotspring.dto;
 
-public class ParkingSpotDto {
+public class ParkVehicleDto {
 
     private Integer spotId;
 
