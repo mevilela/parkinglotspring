@@ -28,6 +28,10 @@ public class VehicleService {
 
     }
 
+    public Vehicle findByLicenseNo(String vehicleLicenseNo){
+        return vehicleRepository.findVehicleByLicenseNo(vehicleLicenseNo);
+    }
+
     public Optional<Vehicle> findById(Integer vehicleId) {
         return vehicleRepository.findById(vehicleId);
     }

@@ -33,16 +33,28 @@ public class ParkingTicketManager {
         ParkingTicket parkingTicket = new ParkingTicket();
         parkingTicket.setTimestamp(LocalDateTime.now());
 
-        Optional<Vehicle> vehicleOptional = vehicleService.findById(createParkingTicketDTO.getVehicleId());
-        if (vehicleOptional.isEmpty()){
-            throw  new RuntimeException("Vehicle not found");
+        Vehicle vehicle = vehicleService.findByLicenseNo(createParkingTicketDTO.getVehicleLicenseNo());
+
+        if (vehicle.getLicenseNo().isEmpty()){
+            vehicleService.createNewVehicle(vehicle);
         }
+
+
+//        Optional<Vehicle> vehicleOptional = vehicleService.findById(createParkingTicketDTO.getVehicleId());
+//        if (vehicleOptional.isEmpty()){
+//            throw  new RuntimeException("Vehicle not found");
+//        }
+
 
         Entrance entrance = entranceService.createEntrance(new Entrance());
         parkingTicket.setEntrance(entrance);
 
-        parkingTicket.setVehicle(vehicleOptional.get());
+        parkingTicket.setVehicle(vehicle);
 
         return parkingTicketService.createParkingTicket(parkingTicket);
     }
+
+
+
+
 }
