@@ -35,6 +35,7 @@ public class ParkingTicketManager {
 
         Vehicle vehicle = vehicleService.findByLicenseNo(createParkingTicketDTO.getVehicleLicenseNo());
 
+
         //if no vehicle yet, create one by type
         if (vehicle == null){
 
