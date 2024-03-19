@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import zely.parkinglotspring.dto.CreateParkingTicketDTO;
 import zely.parkinglotspring.model.entrance.Entrance;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
-import zely.parkinglotspring.model.vehicle.Vehicle;
+import zely.parkinglotspring.model.vehicle.*;
 import zely.parkinglotspring.service.EntranceService;
 import zely.parkinglotspring.service.parkingticket.ParkingTicketService;
 import zely.parkinglotspring.service.vehicle.VehicleService;
@@ -35,8 +35,23 @@ public class ParkingTicketManager {
 
         Vehicle vehicle = vehicleService.findByLicenseNo(createParkingTicketDTO.getVehicleLicenseNo());
 
-        if (vehicle.getLicenseNo().isEmpty()){
-            vehicleService.createNewVehicle(vehicle);
+        //if no vehicle yet, create one by type
+        if (vehicle == null){
+
+            if(createParkingTicketDTO.getVehicleType() == null ) {
+                throw new RuntimeException("Vehicle type is required and Vehicle is not in the database yet.");
+            }
+
+            Vehicle newVehicle = switch (createParkingTicketDTO.getVehicleType()) {
+                case "car" -> new Car();
+                case "moto" -> new Moto();
+                case "truck" -> new Truck();
+                case "van" -> new Van();
+                default -> throw new RuntimeException("Unknown vehicle type informed");
+            };
+
+            newVehicle.setLicenseNo(createParkingTicketDTO.getVehicleLicenseNo());
+            vehicle = vehicleService.createNewVehicle(newVehicle);
         }
 
 

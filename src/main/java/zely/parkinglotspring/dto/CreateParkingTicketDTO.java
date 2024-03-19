@@ -2,13 +2,9 @@ package zely.parkinglotspring.dto;
 
 public class CreateParkingTicketDTO {
 
-    private Integer vehicleId;
-
     private String vehicleLicenseNo;
+    private String vehicleType;
 
-    public Integer getVehicleId() {
-        return vehicleId;
-    }
 
     public String getVehicleLicenseNo() {
         return vehicleLicenseNo;
@@ -18,7 +14,11 @@ public class CreateParkingTicketDTO {
         this.vehicleLicenseNo = vehicleLicenseNo;
     }
 
-    public void setVehicleId(Integer vehicleId) {
-        this.vehicleId = vehicleId;
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 }
