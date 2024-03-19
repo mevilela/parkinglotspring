@@ -7,6 +7,7 @@ import zely.parkinglotspring.model.vehicle.Vehicle;
 import zely.parkinglotspring.repository.vehicle.VehicleRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService {
@@ -25,5 +26,9 @@ public class VehicleService {
 
         return vehicleRepository.save(vehicle);
 
+    }
+
+    public Optional<Vehicle> findById(Integer vehicleId) {
+        return vehicleRepository.findById(vehicleId);
     }
 }

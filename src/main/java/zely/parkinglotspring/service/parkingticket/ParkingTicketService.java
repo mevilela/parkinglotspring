@@ -1,6 +1,7 @@
 package zely.parkinglotspring.service.parkingticket;
 
 import org.springframework.stereotype.Service;
+import zely.parkinglotspring.dto.CreateParkingTicketDTO;
 import zely.parkinglotspring.model.entrance.Entrance;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
 import zely.parkinglotspring.model.vehicle.Vehicle;
@@ -16,12 +17,8 @@ import java.util.Optional;
 public class ParkingTicketService {
 
     private final ParkingTicketRepository parkingTicketRepository;
-    private final EntranceRepository entranceRepository;
-    private final VehicleRepository vehicleRepository;
-    public ParkingTicketService(ParkingTicketRepository parkingTicketRepository, EntranceRepository entranceRepository, VehicleRepository vehicleRepository) {
+    public ParkingTicketService(ParkingTicketRepository parkingTicketRepository) {
         this.parkingTicketRepository = parkingTicketRepository;
-        this.entranceRepository = entranceRepository;
-        this.vehicleRepository = vehicleRepository;
     }
 
     public List<ParkingTicket> getAllParkingTickets(){
@@ -31,20 +28,6 @@ public class ParkingTicketService {
     }
 
     public ParkingTicket createParkingTicket(ParkingTicket parkingTicket) {
-
-        parkingTicket.setTimestamp(LocalDateTime.now());
-
-        Entrance entrance = entranceRepository.save(new Entrance());
-
-        parkingTicket.setEntrance(entrance);
-
-        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(parkingTicket.getVehicle().getId());
-        if (vehicleOptional.isEmpty()){
-            throw  new RuntimeException("Vehicle not found");
-        }
-
-        parkingTicket.setVehicle(vehicleOptional.get());
-
         return parkingTicketRepository.save(parkingTicket);
     }
 

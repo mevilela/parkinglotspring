@@ -25,7 +25,6 @@ public abstract class ParkingSpot {
 
     @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer id;
     private boolean free = true;
 

@@ -38,9 +38,9 @@ public class ParkingSpotController {
     }
 
     @PostMapping("/park")
-    ResponseEntity<ParkingSpot> parkVehicle(@RequestParam Integer vehicleId, @RequestParam Integer spotId) {
+    ResponseEntity<ParkingSpot> parkVehicle(@RequestBody ParkingSpot parkingSpot) {
 
-        ParkingSpot parkedSpot = parkingSpotService.parkVehicle(vehicleId, spotId);
+        ParkingSpot parkedSpot = parkingSpotService.parkVehicle(parkingSpot);
 
         return new ResponseEntity<>(parkedSpot, HttpStatus.CREATED);
     }

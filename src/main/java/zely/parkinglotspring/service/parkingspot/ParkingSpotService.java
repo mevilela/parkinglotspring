@@ -39,24 +39,36 @@ public class ParkingSpotService {
 
     }
 
-    public ParkingSpot parkVehicle(Integer vehicleId, Integer spotId) {
+    public ParkingSpot parkVehicle(ParkingSpot parkingSpot) {
 
-        Optional<Vehicle> optionalVehicleToPark = vehicleRepository.findById(vehicleId);
+        // maybe also check the parking spot type
+        // with the Vehicle type if they are allowed
+        Optional<Vehicle> optionalVehicleToPark = vehicleRepository.findById(parkingSpot.getVehicle().getId());
 
         if (optionalVehicleToPark.isEmpty()){
             throw new RuntimeException("Vehicle not found");
         }
 
-        Optional<ParkingSpot> optionalSpot = parkingSpotRepository.findById(spotId);
+        Optional<ParkingSpot> optionalSpot = parkingSpotRepository.findById(parkingSpot.getId());
 
         if (optionalSpot.isEmpty()){
             throw new RuntimeException("Spot not found");
         }
 
-        optionalSpot.get().setFree(false);
-        vehicleRepository.save(optionalVehicleToPark.get());
-        optionalSpot.get().setVehicle(optionalVehicleToPark.get());
+        parkingSpot = optionalSpot.get();
 
-        return parkingSpotRepository.save(optionalSpot.get());
+        if(!parkingSpot.isFree()) {
+            throw new RuntimeException("Parking Spot is not free!");
+        }
+
+        Vehicle vehicle = optionalVehicleToPark.get();
+
+        parkingSpot.setFree(false);
+        parkingSpot.setVehicle(vehicle);
+
+        vehicle.setParkingSpot(parkingSpot);
+        vehicleRepository.save(vehicle);
+
+        return parkingSpotRepository.save(parkingSpot);
     }
 }
