@@ -27,7 +27,7 @@ public abstract class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    private LocalDateTime timestamp;
+    private LocalDateTime paymentTimeStamp;
 
     @OneToOne
     @JoinColumn(name = "parking_ticket_id")
@@ -38,10 +38,10 @@ public abstract class Payment {
     public Payment() {
     }
 
-    public Payment(double amount, PaymentStatus paymentStatus, LocalDateTime timestamp, ParkingTicket parkingTicket) {
+    public Payment(double amount, PaymentStatus paymentStatus, LocalDateTime paymentTimeStamp, ParkingTicket parkingTicket) {
         this.amount = amount;
         this.paymentStatus = paymentStatus;
-        this.timestamp = timestamp;
+        this.paymentTimeStamp = paymentTimeStamp;
         this.parkingTicket = parkingTicket;
     }
 
@@ -66,12 +66,12 @@ public abstract class Payment {
         this.paymentStatus = paymentStatus;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public LocalDateTime getPaymentTimeStamp() {
+        return paymentTimeStamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setPaymentTimeStamp(LocalDateTime setPaymentTimeStamp) {
+        this.paymentTimeStamp = paymentTimeStamp;
     }
 
     public ParkingTicket getParkingTicket() {

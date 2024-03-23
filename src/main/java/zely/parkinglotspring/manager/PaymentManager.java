@@ -10,6 +10,7 @@ import zely.parkinglotspring.model.payment.PaymentStatus;
 import zely.parkinglotspring.service.parkingticket.ParkingTicketService;
 import zely.parkinglotspring.service.payment.PaymentService;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -48,12 +49,13 @@ public class PaymentManager {
 
         payment.setAmount(paymentDto.getAmountToPay());
         payment.setParkingTicket(ticket);
+        payment.setPaymentTimeStamp(LocalDateTime.now());
 
         payment = paymentService.processPayment(payment);
 
         ticket.setPayment(payment);
 
-        parkingTicketService.updateParkingTicket(ticket);
+        parkingTicketService.updateTicket(ticket);
 
         return payment;
 

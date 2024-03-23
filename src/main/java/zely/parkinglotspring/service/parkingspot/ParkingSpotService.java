@@ -34,6 +34,10 @@ public class ParkingSpotService {
 
     }
 
+    public  ParkingSpot updateParkingSpot(ParkingSpot parkingSpot){
+        return parkingSpotRepository.save(parkingSpot);
+    }
+
     public Optional<ParkingSpot> findParkingSpotById(Integer id){
         return parkingSpotRepository.findById(id);
     }

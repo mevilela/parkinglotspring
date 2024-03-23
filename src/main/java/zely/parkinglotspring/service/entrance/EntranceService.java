@@ -1,4 +1,4 @@
-package zely.parkinglotspring.service;
+package zely.parkinglotspring.service.entrance;
 
 import org.springframework.stereotype.Service;
 import zely.parkinglotspring.model.entrance.Entrance;

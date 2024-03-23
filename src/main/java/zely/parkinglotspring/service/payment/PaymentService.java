@@ -26,4 +26,8 @@ public class PaymentService {
 
         return paymentRepository.save(payment);
     }
+
+    public Payment updatePayment(Payment payment){
+        return paymentRepository.save(payment);
+    }
 }

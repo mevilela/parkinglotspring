@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import zely.parkinglotspring.model.parkingrate.ParkingRate;
 import zely.parkinglotspring.model.parkingspot.*;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
 
@@ -40,6 +41,7 @@ public abstract class Vehicle {
 
 
     public abstract void assignTicket(ParkingTicket ticket);
+
 
     public Vehicle() {
     }

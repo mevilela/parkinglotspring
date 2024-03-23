@@ -5,7 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
+import zely.parkinglotspring.model.vehicle.Vehicle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +18,7 @@ public class ParkingRate {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer id;
 
-    private double hours;
+//    private double hours;
 
     private double parkingRate;
 
@@ -29,30 +31,46 @@ public class ParkingRate {
     @JsonIgnore
     private List<ParkingTicket> tickets;
 
+    private String vehicleType;
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
     public ParkingRate() {
     }
 
-    public ParkingRate( double parkingRate) {
+    public ParkingRate(double parkingRate, String vehicleType) {
+        this.parkingRate = parkingRate;
+        this.vehicleType = vehicleType;
+    }
+
+    public ParkingRate(double parkingRate) {
         this.parkingRate = parkingRate;
     }
 
-    public ParkingRate(double hours, double parkingRate, ParkingLot parkingLot) {
-        this.hours = hours;
+    public ParkingRate(double parkingRate, ParkingLot parkingLot) {
+//        this.hours = hours;
         this.parkingRate = parkingRate;
         this.parkingLot = parkingLot;
     }
+
 
     public Integer getId() {
         return id;
     }
 
-    public double getHours() {
-        return hours;
-    }
-
-    public void setHours(double hours) {
-        this.hours = hours;
-    }
+//    public double getHours() {
+//        return hours;
+//    }
+//
+//    public void setHours(double hours) {
+//        this.hours = hours;
+//    }
 
     public double getParkingRate() {
         return parkingRate;

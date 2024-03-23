@@ -43,10 +43,11 @@ public class ParkingTicketService {
         }
     }
 
-    public ParkingTicket updateParkingTicket(ParkingTicket ticket){
+    public ParkingTicket updateTicket(ParkingTicket parkingTicket){
 
-       return parkingTicketRepository.save(ticket);
+       return parkingTicketRepository.save(parkingTicket);
 
     }
+
 
 }

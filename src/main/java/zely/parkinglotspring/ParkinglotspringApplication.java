@@ -21,7 +21,7 @@ import zely.parkinglotspring.model.vehicle.*;
 import zely.parkinglotspring.repository.displayboard.DisplayBoardRepository;
 import zely.parkinglotspring.repository.entrance.EntranceRepository;
 import zely.parkinglotspring.repository.exit.ExitRepository;
-import zely.parkinglotspring.repository.parkinrate.ParkingRateRepository;
+import zely.parkinglotspring.repository.parkingrate.ParkingRateRepository;
 import zely.parkinglotspring.repository.payment.PaymentRepository;
 import zely.parkinglotspring.repository.account.AccountRepository;
 import zely.parkinglotspring.repository.parkinglot.ParkingLotRepository;
@@ -73,7 +73,7 @@ public class ParkinglotspringApplication {
 
             findFreeCompactSpotAndParkVehicle(parkingSpotRepository, vehicleRepository, vehicle);
 
-            ParkingRate parkingRate = new ParkingRate(2.0,2.0,parkingLot);
+            ParkingRate parkingRate = new ParkingRate(2.0, parkingLot);
             parkingRateRepository.save(parkingRate);
 
 

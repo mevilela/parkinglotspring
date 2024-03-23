@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zely.parkinglotspring.dto.CreateParkingTicketDTO;
+import zely.parkinglotspring.dto.FinalizeParkingDto;
 import zely.parkinglotspring.manager.ParkingTicketManager;
 import zely.parkinglotspring.model.parkingticket.ParkingTicket;
 import zely.parkinglotspring.service.parkingticket.ParkingTicketService;
@@ -41,6 +42,20 @@ public class ParkingTicketController {
         ParkingTicket newTicket = parkingTicketManager.createParkingTicket(createParkingTicketDTO);
 
         return new ResponseEntity<>(newTicket, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/finalize-parking")
+    public ResponseEntity<ParkingTicket> finalizeParking(@RequestBody FinalizeParkingDto finalizeParkingDto){
+        ParkingTicket finalizedParking = parkingTicketManager.finalizeParking(finalizeParkingDto);
+
+        return new ResponseEntity<>(finalizedParking, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/exit-parking")
+    public ResponseEntity<ParkingTicket> exitParking(@RequestBody FinalizeParkingDto finalizeParkingDto){
+        ParkingTicket exitParking = parkingTicketManager.exitParking(finalizeParkingDto);
+
+        return new ResponseEntity<>(exitParking, HttpStatus.CREATED);
     }
 
 
