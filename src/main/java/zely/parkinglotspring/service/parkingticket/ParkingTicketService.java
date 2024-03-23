@@ -43,5 +43,10 @@ public class ParkingTicketService {
         }
     }
 
+    public ParkingTicket updateParkingTicket(ParkingTicket ticket){
+
+       return parkingTicketRepository.save(ticket);
+
+    }
 
 }

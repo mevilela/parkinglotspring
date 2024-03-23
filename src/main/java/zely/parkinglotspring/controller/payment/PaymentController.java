@@ -1,41 +1,28 @@
 package zely.parkinglotspring.controller.payment;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import zely.parkinglotspring.model.parkingticket.ParkingTicket;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import zely.parkinglotspring.dto.PaymentDto;
+import zely.parkinglotspring.manager.PaymentManager;
 import zely.parkinglotspring.model.payment.Payment;
-import zely.parkinglotspring.service.parkingticket.ParkingTicketService;
-import zely.parkinglotspring.service.payment.PaymentService;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
 
-    private final PaymentService paymentService;
-    private final ParkingTicketService parkingTicketService;
+    private final PaymentManager paymentManager;
 
-    public PaymentController(PaymentService paymentService, ParkingTicketService parkingTicketService) {
-        this.paymentService = paymentService;
-        this.parkingTicketService = parkingTicketService;
+    public PaymentController(PaymentManager paymentManager) {
+        this.paymentManager = paymentManager;
     }
 
     @PostMapping("/") //todo parkingAgent and customer allowed
-    public ResponseEntity<String> payTicket(@RequestParam Integer ticketNumber, @RequestParam String paymentMethod){
-      Optional<ParkingTicket> ticket = parkingTicketService.scanParkingTicket(ticketNumber);
-        if(ticket.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        double amountToPay = ticket.get().getAmount();
-        boolean paymentProcessed = paymentService.processPayment(ticketNumber, amountToPay, paymentMethod);
+    public ResponseEntity<Payment> payTicket(@RequestBody PaymentDto paymentDto){
 
-        if(paymentProcessed){
+        return ResponseEntity.ok(paymentManager.processPayment(paymentDto));
 
-            return ResponseEntity.ok("successfully paid");
-
-        } else {
-            return ResponseEntity.internalServerError().body("Payment failed");
-        }
     }
 }

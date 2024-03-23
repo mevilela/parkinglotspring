@@ -54,16 +54,16 @@ public class AccountController {
 ////    //add agent - done
 ////    //add / modify rate
 ////    //add entry / exit panel
-////    //update account
-//      //view account - done
+////    //update account -
+//      //view account - done -
 
 // customer
 //    //take ticket -
 //    //scan ticket -
 //    //pay ticket -
-//        //cash
-//        //credit
-//    //park vehicle
+//        //cash -
+//        //credit -
+//    //park vehicle -
 
 //parkingAgent
 ////    /* update account
@@ -72,7 +72,7 @@ public class AccountController {
 ////     * take ticket -
 ////     * scan ticket -
 ////     * pay ticket -
-////     *   *cash
-////     *   *credit card
-////     * park vehicle
+////     *   *cash -
+////     *   *credit card -
+////     * park vehicle -
 ////     */
