@@ -7,6 +7,8 @@ import zely.parkinglotspring.model.payment.Payment;
 import zely.parkinglotspring.model.payment.PaymentStatus;
 import zely.parkinglotspring.repository.payment.PaymentRepository;
 
+import java.time.LocalDateTime;
+
 @Service
 public class PaymentService {
 
@@ -27,7 +29,4 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public Payment updatePayment(Payment payment){
-        return paymentRepository.save(payment);
-    }
 }

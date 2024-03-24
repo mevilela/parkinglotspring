@@ -73,16 +73,16 @@ public class ParkinglotspringApplication {
 
             findFreeCompactSpotAndParkVehicle(parkingSpotRepository, vehicleRepository, vehicle);
 
-            ParkingRate parkingRate = new ParkingRate(2.0, parkingLot);
+            ParkingRate parkingRate = new ParkingRate(2.0,parkingLot, "car");
             parkingRateRepository.save(parkingRate);
 
 
             //creating ticket
             ParkingTicket ticket = new ParkingTicket();
-            //creating payment method fot the ticket
-            Payment cashPaidTicket = new Cash();
-            //saving payment method
-            ticket.setPayment(cashPaidTicket);
+//            //creating payment method fot the ticket
+//            Payment cashPaidTicket = new Cash();
+//            //saving payment method
+//            ticket.setPayment(cashPaidTicket);
             //setting ticket
             ticket.setParkingRate(parkingRate);
             //setting timestamp
@@ -106,7 +106,7 @@ public class ParkinglotspringApplication {
             ticket.setExitTime(LocalDateTime.of(2024,03,12,21,00,00));
 
             //setting a ticket fot the payment method
-            cashPaidTicket.setParkingTicket(ticket);
+//            cashPaidTicket.setParkingTicket(ticket);
 
             //setting payment amount
             double parkingHours = ticket.getTimestamp().until(ticket.getExitTime(), ChronoUnit.HOURS);
@@ -118,20 +118,20 @@ public class ParkinglotspringApplication {
             parkingTicketRepository.save(ticket);
 
             //setting payment status
-            cashPaidTicket.setPaymentStatus(COMPLETED);
+//            cashPaidTicket.setPaymentStatus(COMPLETED);
+//
+//            //saving payment
+//            paymentRepository.save(cashPaidTicket);
 
-            //saving payment
-            paymentRepository.save(cashPaidTicket);
-
-            //adding Exit
-            Exit exit = new Exit();
-            //adding a ticket for the exit method
-            exit.getTickets().add(ticket);
-            //setting an exit for the ticket
-            ticket.setExit(exit);
-
-            //saving exit
-            exitRepository.save(exit);
+//            //adding Exit
+//            Exit exit = new Exit();
+//            //adding a ticket for the exit method
+//            exit.getTickets().add(ticket);
+//            //setting an exit for the ticket
+//            ticket.setExit(exit);
+//
+//            //saving exit
+//            exitRepository.save(exit);
 
             //saving ticket
             parkingTicketRepository.save(ticket);

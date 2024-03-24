@@ -70,7 +70,7 @@ public abstract class Payment {
         return paymentTimeStamp;
     }
 
-    public void setPaymentTimeStamp(LocalDateTime setPaymentTimeStamp) {
+    public void setPaymentTimeStamp(LocalDateTime paymentTimeStamp) {
         this.paymentTimeStamp = paymentTimeStamp;
     }
 

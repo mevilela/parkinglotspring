@@ -42,14 +42,14 @@ public class PaymentManager {
         // otherwise create new payment
         Payment payment = ticket.getPayment() != null ? ticket.getPayment() :
                 switch (paymentDto.getPaymentMethod()){
-                    case "credicard" -> new CreditCard();
+                    case "creditcard" -> new CreditCard();
                     case "cash" -> new Cash();
                     default -> throw new RuntimeException("Unknown payment method informed");
                 };
 
         payment.setAmount(paymentDto.getAmountToPay());
-        payment.setParkingTicket(ticket);
         payment.setPaymentTimeStamp(LocalDateTime.now());
+        payment.setParkingTicket(ticket);
 
         payment = paymentService.processPayment(payment);
 

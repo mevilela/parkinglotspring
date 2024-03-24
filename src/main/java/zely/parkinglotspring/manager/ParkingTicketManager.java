@@ -48,8 +48,8 @@ public class ParkingTicketManager {
     public ParkingTicket createParkingTicket(CreateParkingTicketDTO createParkingTicketDTO) {
         // chamar os outros services
         ParkingTicket parkingTicket = new ParkingTicket();
-       //todo voltar a colocar localdate.now
-        parkingTicket.setTimestamp(LocalDateTime.of(2024,03,23,18,00,00));
+
+        parkingTicket.setTimestamp(LocalDateTime.now());
 
         Vehicle vehicle = vehicleService.findByLicenseNo(createParkingTicketDTO.getVehicleLicenseNo());
 

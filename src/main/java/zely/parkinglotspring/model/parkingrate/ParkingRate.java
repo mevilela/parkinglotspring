@@ -53,10 +53,10 @@ public class ParkingRate {
         this.parkingRate = parkingRate;
     }
 
-    public ParkingRate(double parkingRate, ParkingLot parkingLot) {
-//        this.hours = hours;
+    public ParkingRate(double parkingRate, ParkingLot parkingLot, String vehicleType) {
         this.parkingRate = parkingRate;
         this.parkingLot = parkingLot;
+        this.vehicleType = vehicleType;
     }
 
 
