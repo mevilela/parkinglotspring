@@ -1,9 +1,11 @@
 package zely.parkinglotspring.model.displayboard;
 
 import jakarta.persistence.*;
+import zely.parkinglotspring.dto.DisplayBoardItemDto;
 import zely.parkinglotspring.model.parkinglot.ParkingLot;
 import zely.parkinglotspring.model.parkingspot.ParkingSpot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +16,8 @@ public class DisplayBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Transient //not persistent - managed programmatically
-    private Map<String, List<ParkingSpot>> parkingSpotsByType = new HashMap<>();
+    @Transient
+    private List<DisplayBoardItemDto> displayBoardItems = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "parking_lot_id")
@@ -24,21 +26,8 @@ public class DisplayBoard {
     public DisplayBoard() {
     }
 
-    public DisplayBoard(Map<String, List<ParkingSpot>> parkingSpotsByType) {
-        this.parkingSpotsByType = parkingSpotsByType;
-    }
-
     public Integer getId() {
         return id;
-    }
-
-
-    public Map<String, List<ParkingSpot>> getParkingSpotsByType() {
-        return parkingSpotsByType;
-    }
-
-    public void setParkingSpotsByType(Map<String, List<ParkingSpot>> parkingSpotsByType) {
-        this.parkingSpotsByType = parkingSpotsByType;
     }
 
     public ParkingLot getParkingLot() {

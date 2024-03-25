@@ -45,4 +45,21 @@ public class ParkingSpotService {
     public ParkingSpot parkVehicle(ParkingSpot parkingSpot) {
         return parkingSpotRepository.save(parkingSpot);
     }
+
+    public List<ParkingSpot> getParkingSpotBySpotType (ParkingSpot parkingSpot){
+
+       return parkingSpotRepository.getParkingSpotsBySpotType(parkingSpot.getClass());
+    }
+
+    public long countOccupiedSpotTypes(Class<? extends ParkingSpot> spotType) {
+        return parkingSpotRepository.countOccupiedSpotsByType(spotType);
+    }
+
+    public long countFreeSpotTypes(Class<? extends ParkingSpot> spotType) {
+        return parkingSpotRepository.countFreeSpotsByType(spotType);
+    }
+
+    public long countTotalSpotsByType(Class<? extends ParkingSpot> spotType) {
+        return parkingSpotRepository.countTotalSpotsByType(spotType);
+    }
 }
