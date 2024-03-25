@@ -4,23 +4,17 @@ import org.springframework.stereotype.Service;
 import zely.parkinglotspring.dto.DisplayBoardDto;
 import zely.parkinglotspring.dto.DisplayBoardItemDto;
 import zely.parkinglotspring.model.parkingspot.*;
-import zely.parkinglotspring.service.displayboard.DisplayBoardService;
 import zely.parkinglotspring.service.parkingspot.ParkingSpotService;
 
 @Service
 public class DisplayBoardManager {
-    private final DisplayBoardService displayBoardService;
     private final ParkingSpotService parkingSpotService;
 
-    public DisplayBoardManager(DisplayBoardService displayBoardService, ParkingSpotService parkingSpotService) {
-        this.displayBoardService = displayBoardService;
+    public DisplayBoardManager(ParkingSpotService parkingSpotService) {
         this.parkingSpotService = parkingSpotService;
     }
 
-    public DisplayBoardDto showSpotsOnDisplayBoard(DisplayBoardItemDto displayBoardItemDto) {
-
-        String spotType = displayBoardItemDto.getSpotType();
-
+    public DisplayBoardDto showSpotsOnDisplayBoard() {
 
         long compactTotalSpots = parkingSpotService.countTotalSpotsByType(Compact.class);
         long largeTotalSpots = parkingSpotService.countTotalSpotsByType(Large.class);
@@ -49,7 +43,6 @@ public class DisplayBoardManager {
         displayBoardDto.getDisplayBoardItemList().add(displayBoardLarge);
         displayBoardDto.getDisplayBoardItemList().add(displayBoardHandicapped);
         displayBoardDto.getDisplayBoardItemList().add(displayBoardMotorcycle);
-
 
         return displayBoardDto;
 
