@@ -26,13 +26,7 @@ public class PaymentManager {
 
     public Payment processPayment(PaymentDto paymentDto) {
 
-        Optional<ParkingTicket> ticketOptional = parkingTicketService.scanParkingTicket(paymentDto.getTicketNumber());
-
-        if (ticketOptional.isEmpty()){
-            throw new RuntimeException("Ticket not found");
-        }
-
-        ParkingTicket ticket = ticketOptional.get();
+       ParkingTicket ticket = parkingTicketService.scanParkingTicket(paymentDto.getTicketNumber());
 
         if(ticket.getPayment() != null && ticket.getPayment().getPaymentStatus().equals(PaymentStatus.COMPLETED))  {
             throw new RuntimeException("Ticket already paid.");

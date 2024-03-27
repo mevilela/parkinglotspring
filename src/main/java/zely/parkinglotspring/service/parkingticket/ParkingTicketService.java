@@ -32,15 +32,10 @@ public class ParkingTicketService {
     }
 
 
-    public Optional<ParkingTicket> scanParkingTicket(Integer ticketNumber) {
+    public ParkingTicket scanParkingTicket(Integer ticketNumber) {
 
-        if (ticketNumber != null){
-
-            return parkingTicketRepository.findById(ticketNumber);
-
-        } else {
-            throw new RuntimeException("Invalid ticket");
-        }
+        return Optional.ofNullable(ticketNumber).flatMap(parkingTicketRepository::findById)
+                .orElseThrow(() -> new RuntimeException("Invalid ticket"));
     }
 
     public ParkingTicket updateTicket(ParkingTicket parkingTicket){

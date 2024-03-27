@@ -44,7 +44,7 @@ public class ParkingSpotController {
 
         ParkingSpot parkedSpot = parkingSpotManager.parkVehicle(parkVehicleDto);
 
-        return new ResponseEntity<>(parkedSpot, HttpStatus.CREATED);
+        return new ResponseEntity<>(parkedSpot, HttpStatus.OK);
     }
 
 

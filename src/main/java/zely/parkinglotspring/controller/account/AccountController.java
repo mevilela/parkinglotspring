@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import zely.parkinglotspring.model.account.*;
 import zely.parkinglotspring.model.parkingspot.ParkingSpot;
@@ -16,32 +17,35 @@ import java.util.List;
 @RequestMapping("/api/account")
 public class AccountController {
 
-    AccountService accountService;
-
+    private final AccountService accountService;
     public AccountController(AccountService accountService){
         this.accountService = accountService;
     }
 
+    //todo: Passar username como paramentro nos metodos q so o admin pode ter acesso
+    //todo: criar um novo metodo no service "findAccountByUserName" e validar se é do tipo admin - se true: pode seguir, se false - exception.
+    //todo: testes
+
     @GetMapping
-    public List<Account> getAllAccounts(){
-        return accountService.getAllAccounts();
+    public ResponseEntity<List<Account>> getAllAccounts(){
+        return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
     @PostMapping("/") //todo apenas admin pode criar
-    public Account newAccount(@RequestBody Account account) {
-        return accountService.newAccount(account);
+    public ResponseEntity<Account> newAccount(@RequestBody Account account) {
+        return ResponseEntity.ok(accountService.newAccount(account));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAccount(@PathVariable Integer id, @RequestBody Account account){
+    public ResponseEntity<Account> updateAccount(@PathVariable Integer id, @RequestBody Account account){
 
         Account updatedAccount = accountService.updateAccountById(id, account);
 
-        return new ResponseEntity<>(updatedAccount, HttpStatus.CREATED);
+        return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable Integer id){
+    public ResponseEntity<Void> deleteAccount(@PathVariable Integer id){
 
         accountService.deleteAccountById(id);
         return new ResponseEntity<>(HttpStatus.OK);

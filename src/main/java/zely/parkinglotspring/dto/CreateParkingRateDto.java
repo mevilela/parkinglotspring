@@ -1,6 +1,6 @@
 package zely.parkinglotspring.dto;
 
-public class SetParkingRateDto {
+public class CreateParkingRateDto {
 
     public double getRate() {
         return rate;

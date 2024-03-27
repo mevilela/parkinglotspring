@@ -33,7 +33,7 @@ public class ParkingTicketController {
     }
 
     @GetMapping("{ticketNumber}") //todo apenas customer e parking agent
-    public ResponseEntity<Optional<ParkingTicket>> scanParkingTicket(@RequestParam @PathVariable Integer ticketNumber){
+    public ResponseEntity<ParkingTicket> scanParkingTicket(@RequestParam @PathVariable Integer ticketNumber){
         return ResponseEntity.ok(parkingTicketService.scanParkingTicket(ticketNumber));
     }
 

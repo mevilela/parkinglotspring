@@ -53,7 +53,6 @@ public class ParkingTicketManager {
 
         Vehicle vehicle = vehicleService.findByLicenseNo(createParkingTicketDTO.getVehicleLicenseNo());
 
-
         //if no vehicle yet, create one by type
         if (vehicle == null){
 
@@ -89,13 +88,7 @@ public class ParkingTicketManager {
 
     public ParkingTicket finalizeParking(FinalizeParkingDto finalizeParkingDto) {
 
-        Optional<ParkingTicket> ticketOptional = parkingTicketService.scanParkingTicket(finalizeParkingDto.getTicketNumber());
-
-        if (ticketOptional.isEmpty()) {
-            throw new RuntimeException("Invalid parking ticket");
-        }
-
-        ParkingTicket ticket = ticketOptional.get();
+        ParkingTicket ticket = parkingTicketService.scanParkingTicket(finalizeParkingDto.getTicketNumber());
 
         ticket.setExitTime(LocalDateTime.now());
 
@@ -111,13 +104,7 @@ public class ParkingTicketManager {
 
     public ParkingTicket exitParking(FinalizeParkingDto finalizeParkingDto) {
 
-        Optional<ParkingTicket> ticketOptional = parkingTicketService.scanParkingTicket(finalizeParkingDto.getTicketNumber());
-
-        if (ticketOptional.isEmpty()) {
-            throw new RuntimeException("Invalid parking ticket");
-        }
-
-        ParkingTicket ticket = ticketOptional.get();
+        ParkingTicket ticket = parkingTicketService.scanParkingTicket(finalizeParkingDto.getTicketNumber());
 
         if(!ticket.getPayment().getPaymentStatus().equals(PaymentStatus.COMPLETED)){
             throw new RuntimeException("Please check your ticket payment");

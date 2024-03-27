@@ -1,5 +1,6 @@
 package zely.parkinglotspring.controller.displayboard;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +11,9 @@ import zely.parkinglotspring.manager.DisplayBoardManager;
 @RestController
 @RequestMapping("/display-board")
 public class DisplayBoardController {
-
     private final DisplayBoardManager displayBoardManager;
 
-
+    @Autowired
     public DisplayBoardController(DisplayBoardManager displayBoardManager) {
         this.displayBoardManager = displayBoardManager;
     }

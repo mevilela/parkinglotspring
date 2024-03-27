@@ -4,7 +4,7 @@ package zely.parkinglotspring.controller.parkingrate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import zely.parkinglotspring.dto.SetParkingRateDto;
+import zely.parkinglotspring.dto.CreateParkingRateDto;
 import zely.parkinglotspring.manager.ParkingRateManager;
 import zely.parkinglotspring.model.parkingrate.ParkingRate;
 import zely.parkinglotspring.service.parkingrate.ParkingRateService;
@@ -15,8 +15,8 @@ import java.util.List;
 @RequestMapping("/parking-rate")
 public class ParkingRateController {
 
-    ParkingRateManager parkingRateManager;
-    ParkingRateService parkingRateService;
+    private final ParkingRateManager parkingRateManager;
+    private final ParkingRateService parkingRateService;
 
     public ParkingRateController(ParkingRateManager parkingRateManager, ParkingRateService parkingRateService) {
         this.parkingRateManager = parkingRateManager;
@@ -24,7 +24,7 @@ public class ParkingRateController {
     }
 
     @PostMapping("/") //todo apenas adm
-    public ResponseEntity<ParkingRate> CreateParkingRate(@RequestBody SetParkingRateDto parkingRateDto){
+    public ResponseEntity<ParkingRate> createParkingRate(@RequestBody CreateParkingRateDto parkingRateDto){
 
         ParkingRate newParkingRate = parkingRateManager.createParkingRate(parkingRateDto);
 

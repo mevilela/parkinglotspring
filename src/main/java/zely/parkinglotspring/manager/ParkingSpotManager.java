@@ -28,31 +28,33 @@ public class ParkingSpotManager {
         // maybe also check the parking spot type
         // with the Vehicle type if they are allowed
 
-        Optional<Vehicle> optionalVehicleToPark = vehicleService.findById(parkVehicleDto.getVehicleId());
+//        Optional<Vehicle> optionalVehicleToPark = vehicleService.findById(parkVehicleDto.getVehicleId());
+//        if (optionalVehicleToPark.isEmpty()){
+//            throw new RuntimeException("Vehicle not found");
+//        }
 
-        if (optionalVehicleToPark.isEmpty()){
-            throw new RuntimeException("Vehicle not found");
-        }
-
-        Optional<ParkingSpot> optionalSpot = parkingSpotService.findParkingSpotById(parkVehicleDto.getSpotId());
-
-        if (optionalSpot.isEmpty()){
-            throw new RuntimeException("Spot not found");
-        }
-
-        ParkingSpot parkingSpot = optionalSpot.get();
+        // NAO PRECISA USAR O OPTIONAL - USAR O OR-ELSE!!!! - MAIS BONITO!
 
 
-        if(!parkingSpot.isFree()) {
-            throw new RuntimeException("Parking Spot is not free!");
-        }
+//        Optional<ParkingSpot> optionalSpot = parkingSpotService.findParkingSpotById(parkVehicleDto.getSpotId());
+//
+//        if (optionalSpot.isEmpty()){
+//            throw new RuntimeException("Spot not found");
+//        }
+//
+//        ParkingSpot parkingSpot = optionalSpot.get();
 
-        Vehicle vehicle = optionalVehicleToPark.get();
+
+        Vehicle vehicleToPark = vehicleService.findById(parkVehicleDto.getVehicleId()).orElseThrow(() -> new RuntimeException("Vehicle not found"));
+
+        ParkingSpot parkingSpot = parkingSpotService.findParkingSpotById(parkVehicleDto.getSpotId())
+                .filter(ParkingSpot::isFree)
+                .orElseThrow(()-> new RuntimeException("Spot not found"));
 
         parkingSpot.setFree(false);
-        parkingSpot.setVehicle(vehicle);
+        parkingSpot.setVehicle(vehicleToPark);
 
-        vehicle.setParkingSpot(parkingSpot);
+        vehicleToPark.setParkingSpot(parkingSpot);
 
         return parkingSpotService.createNewParkingSpot(parkingSpot);
     }

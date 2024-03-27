@@ -1,27 +1,21 @@
 package zely.parkinglotspring.manager;
 
 import org.springframework.stereotype.Service;
-import zely.parkinglotspring.dto.SetParkingRateDto;
+import zely.parkinglotspring.dto.CreateParkingRateDto;
 import zely.parkinglotspring.model.parkingrate.ParkingRate;
-import zely.parkinglotspring.model.vehicle.Vehicle;
 import zely.parkinglotspring.service.parkingrate.ParkingRateService;
 import zely.parkinglotspring.service.parkingticket.ParkingTicketService;
-
-import java.util.List;
 
 @Service
 public class ParkingRateManager {
 
-    ParkingRateService parkingRateService;
+    private final ParkingRateService parkingRateService;
 
-    ParkingTicketService parkingTicketService;
-
-    public ParkingRateManager(ParkingRateService parkingRateService, ParkingTicketService parkingTicketService) {
+    public ParkingRateManager(ParkingRateService parkingRateService) {
         this.parkingRateService = parkingRateService;
-        this.parkingTicketService = parkingTicketService;
     }
 
-    public ParkingRate createParkingRate(SetParkingRateDto parkingRateDto){
+    public ParkingRate createParkingRate(CreateParkingRateDto parkingRateDto){
 
         double rateValue = parkingRateDto.getRate();
 
@@ -33,6 +27,8 @@ public class ParkingRateManager {
             case "truck" -> new ParkingRate(rateValue, "truck");
             default -> throw new IllegalArgumentException("Invalid vehicle type provided");
         };
+
+        ParkingRate test = new ParkingRate(rateValue, parkingRateDto.getVehicleType());
 
         parkingRateService.setParkingRate(parkingRateByType);
 
