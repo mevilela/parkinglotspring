@@ -16,7 +16,7 @@ public class ParkingRateService {
         this.parkingRateRepository = parkingRateRepository;
     }
 
-    public ParkingRate setParkingRate(ParkingRate parkingRate){
+    public ParkingRate defineParkingRate(ParkingRate parkingRate){
 
         return parkingRateRepository.save(parkingRate);
     }

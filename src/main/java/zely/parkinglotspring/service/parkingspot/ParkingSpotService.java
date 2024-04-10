@@ -42,9 +42,7 @@ public class ParkingSpotService {
         return parkingSpotRepository.findById(id);
     }
 
-    public ParkingSpot parkVehicle(ParkingSpot parkingSpot) {
-        return parkingSpotRepository.save(parkingSpot);
-    }
+
 
     public List<ParkingSpot> getParkingSpotBySpotType (ParkingSpot parkingSpot){
 

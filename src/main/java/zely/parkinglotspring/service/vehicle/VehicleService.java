@@ -29,6 +29,9 @@ public class VehicleService {
     }
 
     public Vehicle findByLicenseNo(String vehicleLicenseNo){
+
+        if (vehicleLicenseNo == null) throw new NullPointerException("License plate can't be null");
+
         return vehicleRepository.findVehicleByLicenseNo(vehicleLicenseNo);
     }
 

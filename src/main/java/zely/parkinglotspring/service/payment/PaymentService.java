@@ -20,6 +20,10 @@ public class PaymentService {
 
     public Payment processPayment(Payment payment) {
 
+        if (payment == null || payment.getParkingTicket() == null) {
+            throw new IllegalArgumentException("Payment and parking ticket must not be null.");
+        }
+
         if (payment.getAmount() != payment.getParkingTicket().getAmount()){
             payment.setPaymentStatus(PaymentStatus.FAILED);
         } else {

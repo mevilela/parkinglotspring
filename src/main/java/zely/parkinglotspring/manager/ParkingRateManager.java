@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import zely.parkinglotspring.dto.CreateParkingRateDto;
 import zely.parkinglotspring.model.parkingrate.ParkingRate;
 import zely.parkinglotspring.service.parkingrate.ParkingRateService;
-import zely.parkinglotspring.service.parkingticket.ParkingTicketService;
 
 @Service
 public class ParkingRateManager {
@@ -30,7 +29,7 @@ public class ParkingRateManager {
 
         ParkingRate test = new ParkingRate(rateValue, parkingRateDto.getVehicleType());
 
-        parkingRateService.setParkingRate(parkingRateByType);
+        parkingRateService.defineParkingRate(parkingRateByType);
 
         return parkingRateByType;
 
